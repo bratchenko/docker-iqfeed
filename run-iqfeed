@@ -1,0 +1,19 @@
+#!/bin/bash
+
+. ./iqfeed.conf
+
+if [ "IQFEED_VERSION" == "" ] ; then echo Need IQFEED_VERSION ; exit 1 ; fi
+if [ "IQFEED_PRODUCT" == "" ] ; then echo Need IQFEED_PRODUCT ; exit 1 ; fi
+
+export WINEPREFIX=/app/wine-root
+/usr/bin/xvfb-run -s -noreset -a /usr/bin/wine \
+    'c:\\Program Files (x86)\\DTN\\IQFeed\\iqconnect.exe' \
+    -version "$IQFEED_VERSION" \
+    -product "$IQFEED_PRODUCT" \
+    -autoconnect &
+
+echo "Waiting 10 seconds..."
+/bin/sleep 10
+
+/bin/echo "S,CONNECT" | /bin/nc -q-1 localhost 9300
+

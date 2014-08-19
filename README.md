@@ -39,9 +39,11 @@ apt-get -y install wine1.7
 
 11. Your image is ready and named `iqfeed`.
 
-You can run it now on any machine: `docker run --net="host" iqfeed`.
+You can run it now: `docker run --net="host" iqfeed`.
 
 We use `--net="host"` because IQFeed is listening only to localhost and it's the most convenient way to map it to the host machine. You can use some kind of proxy within docker container (or outside it) to make IQFeed to be available ouside host machine.
+
+For transferring image between machines, you can use http://hub.docker.com. For example, if your account on Docker Hub is "bratchenko", you should run `docker build -t bratchenko/iqfeed .`, then `docker push bratchenko/iqfeed`. Then on the target machine, run `docker pull bratchenko/iqfeed` and `docker run --net="host" bratchenko/iqfeed`.
 
 Troubleshooting
 ---------------

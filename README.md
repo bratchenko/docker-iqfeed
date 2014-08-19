@@ -36,3 +36,9 @@ apt-get -y install wine1.7
 9. In the current folder, run `docker build -t iqfeed .`.
 
 10. Your image is ready by the name `iqfeed`. You can run it now on any machine: `docker run --net="host" iqfeed`. We use `--net="host"` because IQFeed is listening only to localhost and it's the most convenient way to map it to the host machine. You can use some kind of proxy within docker container (or outside it) to make IQFeed to be available ouside host machine.
+
+Troubleshooting
+---------------
+
+Right now there is 10-seconds timeout between running iqfeed and connecting to it. If you run docker container on much faster or much slower machine than I do, just change `10` to whatever works for you in `run-iqfeed` file and do step 9 again.
+

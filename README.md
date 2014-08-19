@@ -3,9 +3,9 @@ Dockerized IQFeed client
 
 It stores login/password in Windows registry within container for now, so you need to create your own wine root for this to work.
 
-I recommend performing following steps on Ubuntu 14.04 machine. You can set up one in 5 minutes using, for example, [http://digitalocean.com].
+I recommend performing following steps on Ubuntu 14.04 machine. You can set up one in 5 minutes using, for example, http://digitalocean.com.
 
-Idea and Makefile are borrowed from [https://github.com/macdice/iqfeed-debian].
+Idea and Makefile are borrowed from https://github.com/macdice/iqfeed-debian.
 
 Building docker image
 ---------------------

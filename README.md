@@ -23,19 +23,25 @@ apt-get -y install wine1.7
 
 3. Run `make fetch` in this folder to download IQFeed Client installation file. You can change IQFeed Client version at the top of Makefile.
 
-4. In GUI, run `make install`. Don't change default settings.
+4. Launch GUI.
 
-5. In GUI, run `make launch`. Enter your username and password, check "Save Login And Password" and "Automatically Connect" checkboxes.
+5. Run `make install`. Don't change default settings.
 
-6. You can exit GUI now.
+6. Run `make launch`. Enter your username and password, check "Save Login And Password" and "Automatically Connect" checkboxes.
 
-7. Edit iqfeed.conf and enter your desired iqfeed version and product name.
+7. You can exit GUI now.
 
-8. Install docker, if you haven't before: `curl -sSL https://get.docker.io/ubuntu/ | sudo sh`
+8. Edit iqfeed.conf and enter your desired iqfeed version and product name.
 
-9. In the current folder, run `docker build -t iqfeed .`.
+9. Install docker, if you haven't before: `curl -sSL https://get.docker.io/ubuntu/ | sudo sh`.
 
-10. Your image is ready by the name `iqfeed`. You can run it now on any machine: `docker run --net="host" iqfeed`. We use `--net="host"` because IQFeed is listening only to localhost and it's the most convenient way to map it to the host machine. You can use some kind of proxy within docker container (or outside it) to make IQFeed to be available ouside host machine.
+10. In the current folder, run `docker build -t iqfeed .`.
+
+11. Your image is ready and named `iqfeed`.
+
+You can run it now on any machine: `docker run --net="host" iqfeed`.
+
+We use `--net="host"` because IQFeed is listening only to localhost and it's the most convenient way to map it to the host machine. You can use some kind of proxy within docker container (or outside it) to make IQFeed to be available ouside host machine.
 
 Troubleshooting
 ---------------

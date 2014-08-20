@@ -1,14 +1,58 @@
 Dockerized IQFeed client
 =======================
 
-It stores login/password in Windows registry within container for now, so you need to create your own wine root for this to work.
+Usage
+-----
 
-I recommend performing following steps on Ubuntu 14.04 machine. You can set up one in 5 minutes using, for example, http://digitalocean.com.
+```
+docker run -e LOGIN=<your iqfeed login> -e PASSWORD=<your iqfeed password> -p 5009:5010 -p 9100:9101 bratchenko/iqfeed
+```
 
-Idea and Makefile are borrowed from https://github.com/macdice/iqfeed-debian.
+You should see out put like this:
+```
+Connecting to port  9300
+Disconnected. Reconnecting in 1 second.
+Connecting to port  9300
+Disconnected. Reconnecting in 1 second.
+fixme:thread:GetThreadPreferredUILanguages 52, 0x32fac4, 0x32fb34 0x32facc
+fixme:heap:HeapSetInformation (nil) 1 (nil) 0
+fixme:thread:GetThreadPreferredUILanguages 52, 0x32f880, 0x32f8f0 0x32f888
+```
+
+That's totally ok.
+
+Wait until you start seeing log lines that have word "Connected" in them. They should look like this:
+
+```
+S,STATS,66.112.148.223,60002,500,0,1,0,5,0,Aug 20 2:42PM,Aug 20 2:42PM,Connected,5.1.1.0,416828,0.55,0.02,0.03,3.94,0.11,0.18,
+```
+
+Here you go, now you should be able to connect to ports 5009 or 9100 to the current machine as if you're connecting to an IQFeed client.
+
+If you don't start seeing "Connected" lines in about 1 minute, then you probably entered login or password incorrectly. Unfortunately, IQFeed doesn't say anything about it, just doesn't connect.
+
+Details
+-------
+
+This image runs an IQFeed client (version 5.1.1.0) using Ubuntu 14.04 and wine.
+
+It exposes IQFeed ports 5009 and 9100 as 5010 and 9101 correspondingly. Port change is because IQFeed listens on localhost and proxy embeded into container translates those ports to 5010 and 9101.
+
+Image accepts following environment variables:
+
+* LOGIN - IQFeed account login (not the one for http://iqfeed.net site, by for IQFeed client)
+* PASSWORD - IQFeed account password
+* APP_NAME - application name that is passed to the IQFeed server (if you don't have one, or don't know it, it will still work with IQFEED_DEMO app name)
+* APP_VERSION - application version that is passed to IQFeed (defaults to 1.0.0.0)
 
 Building docker image
 ---------------------
+
+If you want to build your own image, probably with modification, follow the steps below.
+
+I recommend doing it on Ubuntu 14.04 machine so that it is similar to what is within container and Wine application installed on host machine will work well within container. You can set up one in 5 minutes using, for example, http://digitalocean.com.
+
+Idea and Makefile are borrowed from https://github.com/macdice/iqfeed-debian.
 
 1. Install wine
 
@@ -39,14 +83,6 @@ apt-get -y install wine1.7
 
 11. Your image is ready and named `iqfeed`.
 
-You can run it now: `docker run --net="host" iqfeed`.
-
-We use `--net="host"` because IQFeed is listening only to localhost and it's the most convenient way to map it to the host machine. You can use some kind of proxy within docker container (or outside it) to make IQFeed to be available ouside host machine.
+You can run it now: `docker run -e LOGIN=login -e PASSWORD=password iqfeed`.
 
 For transferring image between machines, you can use http://hub.docker.com. For example, if your account on Docker Hub is "bratchenko", you should run `docker build -t bratchenko/iqfeed .`, then `docker push bratchenko/iqfeed`. Then on the target machine, run `docker pull bratchenko/iqfeed` and `docker run --net="host" bratchenko/iqfeed`.
-
-Troubleshooting
----------------
-
-Right now there is 10-seconds timeout between running iqfeed and connecting to it. If you run docker container on much faster or much slower machine than I do, just change `10` to whatever works for you in `run-iqfeed` file and do step 9 again.
-

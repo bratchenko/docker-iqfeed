@@ -76,6 +76,10 @@ function startIqFeed() {
 		].join("\r\n")+"\r\n");
 	});
 	socket.on('data', function(data) {
+		if (data && data.toString().match(/S,STATS.*Not Connected/)) {
+                    console.log("Sending 'connect' command.");
+                    socket.write("S,CONNECT\r\n");
+                }
 		console.log(data.toString ? data.toString().replace(/[\r\n]+/, '') : data);
 	});
 }
